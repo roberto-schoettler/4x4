@@ -1,0 +1,17 @@
+function recipeSearch() {
+    Ext.util.JSONP.request({
+        url: 'https://api.edamam.com/search',
+        params: {
+            q: 'chicken, rice',
+            app_id: '18cf1f0b',
+            app_key: '785f31dc2852bc42e2af49f8645243cf'
+        },
+        type: 'get',
+        success: function(data) {
+            console.log(data);
+        },
+        failure: function(data) {
+            console.log("Oops!: " + data);
+        }
+    });
+}
