@@ -25,7 +25,7 @@ function queryDBError(err) {
    alert("Error processing SQL: " + err.code);
 }
 
-function getRecipesList(callback) {
+function getRecipesList(preferences, callback) {
 	var result = [];
 	
 	db.transaction(function(tx) {

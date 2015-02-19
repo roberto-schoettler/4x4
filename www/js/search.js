@@ -1,4 +1,4 @@
-function recipeSearch(ingredients) {
+function search(ingredients, callback) {
     Ext.util.JSONP.request({
         url: 'https://api.edamam.com/search',
         params: {
@@ -8,7 +8,12 @@ function recipeSearch(ingredients) {
         },
         type: 'get',
         success: function(data) {
-            console.log(data);
+            var recipes = [];
+
+            for (var i = 0; i < data.hits.length; i++) {
+                recipes.push(data.hits[i].recipe);
+            }
+            callback(recipes);
         },
         failure: function(data) {
             console.log("Oops!: " + data);
@@ -16,62 +21,35 @@ function recipeSearch(ingredients) {
     });
 }
 
-function getNutrition(recipe){
+
+function getNutrition(recipe) {
 
     var hiddenForm = Ext.create('Ext.form.Panel', {
-        title:'hiddenForm',
+        title: 'hiddenForm',
         standardSubmit: true,
         timeout: 5000,
-        height:0,
+        height: 0,
         width: 0,
         hidden: true,
-        items:[
-            {xtype:'hiddenfield', name:'jsonData', value:JSON.stringify(recipe)},
-            // additional fields
-            ]
-        });
-
-        hiddenForm.submit({
-            url: 'https://api.edamam.com/api/nutrition-details?app_id=4028f699&app_key=44e17ab66584a674d971a63a71508e60',
-            method : 'POST',
-
-            success:function(data){
-                console.log("success "+data);
+        items: [{
+                xtype: 'hiddenfield',
+                name: 'jsonData',
+                value: JSON.stringify(recipe)
             },
-            failure:function(data){
-                console.log("nope "+data);
-            }
-        });
-        //hiddenForm.getForm().submit()
-   /* 
-   Ext.Ajax.request({
-        url: 'https://api.edamam.com/api/nutrition-details',
+            // additional fields
+        ]
+    });
+
+    hiddenForm.submit({
+        url: 'https://api.edamam.com/api/nutrition-details?app_id=4028f699&app_key=44e17ab66584a674d971a63a71508e60',
         method: 'POST',
-        params: {
-            app_id: '4028f699',
-            app_key: '44e17ab66584a674d971a63a71508e60'
-        },
-        useDefaultXhrHeader : false,
-        cors : true,
-        jsonData : recipe,
+
         success: function(data) {
-            console.log(data);
+            console.log("success " + data);
         },
         failure: function(data) {
-            console.log("Oops!: " + data);
-            console.log(recipe);
-        }
-    });
-*/
-/*
-    Ext.Ajax.request({
-        url: 'js/recipe.json',
-        async: false,
-        success: function(data) {
-            response = Ext.decode(data.responseText);
-            console.log(response.title);
+            console.log("nope " + data);
         }
     });
 
-    console.log('asd');*/
 }
