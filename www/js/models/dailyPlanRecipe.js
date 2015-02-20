@@ -1,6 +1,6 @@
 Ext.define('Nutrilicious.models.DailyPlanRecipe', {
     extend: 'Ext.data.Model',
     config: {
-        fields: ['item', 'meal']
+        fields: ['id', 'title', 'meal', 'quantity', 'image', 'url', 'servingSize', 'servingUnit']
     }
 });

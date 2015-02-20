@@ -4,13 +4,27 @@ Ext.define('Nutrilicious.screens.DailyPlan', {
     config: {
 		layout: 'fit',
 		items: [{
+			html: '<span class="empty-list">No recipes planned for this day!</span>',
+			padding: 20
+		}, {
 			xtype: 'list',
-			itemTpl: '{item}',
+			itemTpl: '{[values.title.substring(0, 25)]} ({quantity})',
 			itemCls: 'remove',
 			store: Ext.create('Nutrilicious.stores.DailyPlan'),
 			grouped: true,
+			listeners: {
+				itemtap: function (list, index, target, record, e, eOpts) {
+					showRecipe(record);
+				},
+				disclose: function (field, record, target, index, e, eOpts) {
+					e.stopEvent();
+				}
+			},
 			onItemDisclosure: function (record) {
-				Ext.Msg.alert('Click detected', 'You clicked on ' + record.data.item);
+				var date = formatDate(Ext.getCmp('datepicker').getValue());
+				removeRecipeFromPlan(record.data.id, date, function () {
+					update();
+				});
 			}
 		}]
 	}

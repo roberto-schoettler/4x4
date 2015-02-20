@@ -4,7 +4,7 @@ Ext.define('Nutrilicious.stores.Nutrients', {
     config: {
 		model: 'Nutrilicious.models.NutrientChart'
 	},
-	loadData: function () {
+	loadData: function (data) {
 		var data = [{
 			'name': 'Carbs',
 			'value': 100 * Math.random()
@@ -29,5 +29,15 @@ Ext.define('Nutrilicious.stores.Nutrients', {
 		}];
 		
 		this.setData(data);
+	},
+	
+	update: function() {
+		var me = this;
+		var date = formatDate(Ext.getCmp('datepicker').getValue());
+		
+		getNutrientsByDate(date, function (nutrients) {
+			var data = calculatePercentage(nutrients);
+			me.setData(data);
+		});
 	}
 });

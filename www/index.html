@@ -35,6 +35,15 @@
         <!-- Overriding Styles -->
         <link rel="stylesheet" type="text/css" href="css/overrides.css"/>
         
+        <!-- DB -->
+        <script type="text/javascript" src="db/db_functions.js"></script>
+        <script type="text/javascript" src="db/db_prototypes.js"></script>
+        <script type="text/javascript" src="db/db_init.js"></script>gitg
+		
+        <!-- JS -->
+        <script type="text/javascript" src="js/common.js"></script>
+        <script type="text/javascript" src="js/preferences.js"></script>
+        
         <!-- Models -->
         <script type="text/javascript" src="js/models/dailyPlanRecipe.js"></script>
         <script type="text/javascript" src="js/models/recipe.js"></script>
@@ -54,11 +63,10 @@
         <script type="text/javascript" src="js/screens/home.js"></script>
         <script type="text/javascript" src="js/screens/dailyPlan.js"></script>
         <script type="text/javascript" src="js/screens/recipes.js"></script>
-        
-        <!-- DB -->
-        <script type="text/javascript" src="db/db_functions.js"></script>
-        <script type="text/javascript" src="db/db_prototypes.js"></script>
-        <script type="text/javascript" src="db/db_init.js"></script>
+        <script type="text/javascript" src="js/screens/shoppingList.js"></script>
+        <script type="text/javascript" src="js/screens/social.js"></script>
+        <script type="text/javascript" src="js/screens/about.js"></script>
+        <script type="text/javascript" src="js/screens/diets.js"></script>
     </head>
     <body>
         <script type="text/javascript" src="cordova.js"></script>
@@ -95,7 +103,7 @@
 								style: 'line-height: 3em;',
 								items: [{
 									xtype: 'component',
-									html: '<img src="img/icon.png" style="width: 10%;"><img src="img/logo.png" style="max-width: 40%;">',
+									html: '<img src="img/icon.png" style="max-width: 10%; max-height: 46px;"><img src="img/logo.png" style="max-width: 40%; max-height: 46px;">',
 									flex: 1
 								}, {
 									xtype: 'img',
@@ -118,18 +126,18 @@
 								value: new Date(),
 								listeners: {
 									change: function () {
-										Ext.getCmp('NutrientChart').getStore().loadData()
+										update();
 									}
 								}
 							}]
 						}, {
 							xtype: 'carousel',
 							tabBarPosition: 'bottom',
-							activeItem: 1,
+							activeItem: 2,
 							flex: 1,
 							listeners: {
 								activeitemchange: function (carousel, value, oldValue, eOpts) {
-									if (carousel.activeIndex == 0)
+									if (carousel.activeIndex < 2)
 										Ext.getCmp('datepicker').hide({
 											type: 'slideOut',
 											direction: 'up'
@@ -142,20 +150,30 @@
 								}
 							},
 							items: [
+								Ext.create('Nutrilicious.screens.Social', {
+									id: 'SocialScreen'
+								}),
 								Ext.create('Nutrilicious.screens.Profile', {
 									id: 'ProfileScreen'
 								}),
 								Ext.create('Nutrilicious.screens.Home', {
 									id: 'HomeScreen'
 								}),
-								Ext.create('Nutrilicious.screens.DailyPlan'),
-								Ext.create('Nutrilicious.screens.Recipes')
+								Ext.create('Nutrilicious.screens.DailyPlan', {
+									id: 'DailyPlanScreen'
+								}),
+								Ext.create('Nutrilicious.screens.Recipes', {
+									id: 'RecipesScreen'
+								})
 							]
 						}]
 					});
 					
 					// Fixing animation for first slide...
 					Ext.getCmp('datepicker').show();
+					
+					// Initializes the daily plan and the nutrients chart
+					update();
 				}
 			});
         </script>

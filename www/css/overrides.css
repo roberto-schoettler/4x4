@@ -1,3 +1,18 @@
+.empty-list {
+	font-style: italic;
+	text-align: center;
+}
+
+ul.ingredients-list {
+	padding-left: 15px;
+}
+
+ul.ingredients-list li {
+	font-size: 0.8em;
+	list-style: initial;
+	margin: 3px 0px;
+}
+
 .field-label {
 	text-shadow: rgba(255,255,255,0.25) 0 0.08em 0;
 	padding: 15px 11px;

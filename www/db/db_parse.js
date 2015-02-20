@@ -34,12 +34,12 @@ var diets = [
     new Diet("Kidney Friendly", "kidney-friendly",  parseInt('00000000001000000000000000000000', 2)),
     new Diet("Peanuts", "peanut-free",              parseInt('00000000010000000000000000000000', 2))];
 
-/*    
+
 var initialSearchList = ["Beef", "Pork", "Fish", "Salad", "Indian", "Chinese", "Vegan", "Vegetarian", "Chicken", "Gluten-free",
     "Soup", "Borsch", "Arepa", "Pasta", "Feijoada", "Rice", "Canadian", "Poutine", "Pizza", "Beer", "Tea", "Coffee", "Ice Cream",
     "Banana", "Mangoe", "Apple", "Vodka"];
-*/
-var initialSearchList = ["Beef", "Vodka"];    
+
+//var initialSearchList = ["Beef", "Vodka"];    
 var iterationCounter = 0;
 var globDiet = 0;
     
@@ -56,7 +56,7 @@ function parseIterate(data) {
         if (initialSearchList.length > 0) {
             search(initialSearchList.pop(), parseIterate);
         } else {
-            if (iterationCounter <= -1) {
+            if (iterationCounter <= 10) {
                 iterationCounter++;
                 search(ingredients[getRandomInt(0, ingredients.length - 1)].title, parseIterate);
             } else {
@@ -73,6 +73,22 @@ function parseIterate(data) {
                 */
                 
                 createDBScript();
+                Ext.Ajax.request({
+                    url: '../photos.php',
+                    params: {
+                        images: JSON.stringify(images)
+             
+                    },
+                    method: 'POST',
+                    success: function(data) {
+                        console.log("Downloading images...");
+                        console.log(JSON.stringify(images));
+                    },
+                    failure: function(data) {
+                        console.log("Oops!: " + data);
+                    }
+                });   
+    
             }
         }
     }, 5000);
@@ -153,6 +169,7 @@ function createDBScript() {
     script += '}'
     
     console.log(script);
+    document.getElementById('script-out').innerHTML = script;
 }
     
 function getRandomInt(min, max)
@@ -234,10 +251,6 @@ function parseApi(data) {
         }
         */
     }
-    request= new XMLHttpRequest();
-    request.open("POST", "../photos.php", true)
-    request.setRequestHeader("Content-type", "application/json")
-    request.send(JSON.stringify(images));
     
     //console.log(recipes);
     //console.log(ingredients);

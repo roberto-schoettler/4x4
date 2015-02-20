@@ -52,11 +52,20 @@ Ext.define('Nutrilicious.screens.Menu', {
 			title: 'Menu',
 			margin: 0
 		}, {
-			text: 'About Us'
+			text: 'About Us',
+			handler: function () {
+				Ext.Viewport.add(Ext.create('Nutrilicious.screens.about')).show();
+			}
 		}, {
-			text: 'Diet Requirements'
+			text: 'Diet Requirements',
+			handler: function () {
+				Ext.Viewport.add(Ext.create('Nutrilicious.screens.diets')).show();
+			}
 		}, {
-			text: 'Shopping List'
+			text: 'Shopping List',
+			handler: function () {
+				Ext.Viewport.add(Ext.create('Nutrilicious.screens.ShoppingList')).show();
+			}
 		}, {
 			text: 'Rate Us'
 		}, {

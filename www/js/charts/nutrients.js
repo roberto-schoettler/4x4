@@ -46,6 +46,6 @@ Ext.define('Nutrilicious.charts.Nutrients', {
 		var me = this;
 		var store = me.getStore();
 		
-		store.loadData();
+		//store.loadData();
 	}
 });
