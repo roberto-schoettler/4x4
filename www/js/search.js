@@ -20,36 +20,3 @@ function search(ingredients, callback) {
         }
     });
 }
-
-
-function getNutrition(recipe) {
-
-    var hiddenForm = Ext.create('Ext.form.Panel', {
-        title: 'hiddenForm',
-        standardSubmit: true,
-        timeout: 5000,
-        height: 0,
-        width: 0,
-        hidden: true,
-        items: [{
-                xtype: 'hiddenfield',
-                name: 'jsonData',
-                value: JSON.stringify(recipe)
-            },
-            // additional fields
-        ]
-    });
-
-    hiddenForm.submit({
-        url: 'https://api.edamam.com/api/nutrition-details?app_id=4028f699&app_key=44e17ab66584a674d971a63a71508e60',
-        method: 'POST',
-
-        success: function(data) {
-            console.log("success " + data);
-        },
-        failure: function(data) {
-            console.log("nope " + data);
-        }
-    });
-
-}

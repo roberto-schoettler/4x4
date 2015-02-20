@@ -15,9 +15,25 @@
 		<script type="text/javascript" src="db_functions.js"></script>
 		<script type="text/javascript" src="db_prototypes.js"></script>
 		<script type="text/javascript" src="db_parse.js"></script>
+		<script type="text/javascript" src="db_init.js"></script>
 		<script type="text/javascript" src="../js/search.js"></script>
 		<script type="text/javascript" charset="utf-8">
-			search("Beef", parseApi);
+			//search("Beef", parseApi);
+			runParse();
+
+			//initDB();
+			
+			//db = window.openDatabase("ProductDB", "1.0", "Product DB", 200000);
+			//db.transaction(populateDB, populateDBError, populateDBSuccess);
+			//getRecipesList(0, "po", logList);
+			//getRecipeInfo(1, logList);
+			//getIngredientsByDate('2015-02-20', '2015-02-21', logList);
+			
+			//getRecipeNutrients(1, logList);
+			
+			function logList(list) {
+				console.log(list);
+			}
 		</script>
 		
 		
@@ -28,13 +44,15 @@
 				db = window.openDatabase("ProductDB", "1.0", "Product DB", 200000);
 				db.transaction(populateDB, populateDBError, populateDBSuccess);
 				
+				//initDB();
+				
 				//db.transaction(queryDB, queryDBError);
-				//getRecipesList(logList);
+				getRecipesList(0, "po", logList);
 				//getRecipeIngredients(1, updateIngredientsList);
 				//getRecipesListByDate('2015-02-20', '2015-02-20', logList);
 				//getNutrientsByDate('2015-02-21', logList);
 				//getRecipeNutrients(1, logList);
-				addRecipeToPlan(1, 2, '2015-02-22');
+				//addRecipeToPlan(1, 2, '2015-02-22');
 			}
 			
 			function updateRecipesList(list) {

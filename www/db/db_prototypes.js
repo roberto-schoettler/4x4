@@ -1,7 +1,7 @@
-function Recipe(id, title, type, servingSize, servingUnit, quantity, meal, image, url, nutrients) {
+function Recipe(id, title, diet, servingSize, servingUnit, quantity, meal, image, url, nutrients) {
     this.id = id;
     this.title = title;
-    this.type = type;
+    this.diet = diet;
 	this.servingSize = servingSize;
 	this.servingUnit = servingUnit;
 	this.quantity = quantity;
@@ -32,8 +32,8 @@ function Unit(id, title) {
 	this.title = title;
 }
 
-function IngredientRecipe(recepeId, ingredientId, weight, weightUnit, quantity, quantityUnit) {
-	this.recepeId = recepeId;
+function IngredientRecipe(recipeId, ingredientId, weight, weightUnit, quantity, quantityUnit) {
+	this.recipeId = recipeId;
 	this.ingredientId = ingredientId;
     this.weight = weight;
     this.weightUnit = weightUnit;
@@ -41,8 +41,8 @@ function IngredientRecipe(recepeId, ingredientId, weight, weightUnit, quantity, 
 	this.quantityUnit = quantityUnit;
 }
 
-function NutrientRecipe(recepeId, nutrientId, quantity) {
-	this.recepeId = recepeId;
+function NutrientRecipe(recipeId, nutrientId, quantity) {
+	this.recipeId = recipeId;
     this.nutrientId = nutrientId;
 	this.quantity = quantity;
 }

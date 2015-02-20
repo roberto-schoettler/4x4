@@ -1,15 +1,8 @@
-var db;
-
 function populateDB(tx) {
-	tx.executeSql('DROP TABLE IF EXISTS DEMO');
-	tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id unique, data)');
-	tx.executeSql('INSERT INTO DEMO (id, data) VALUES (1, "First row")');
-	tx.executeSql('INSERT INTO DEMO (id, data) VALUES (2, "Second row")');
-		
 	tx.executeSql('DROP TABLE IF EXISTS nutrients');
-	tx.executeSql('CREATE TABLE nutrients (id INTEGER unique, title TEXT)');
-	tx.executeSql('INSERT INTO nutrients (id, title) VALUES (1, "Fat")');
-	tx.executeSql('INSERT INTO nutrients (id, title) VALUES (2, "Cholesterol")');
+	tx.executeSql('CREATE TABLE nutrients (id INTEGER unique, title TEXT, quantityUnit TEXT)');
+	tx.executeSql('INSERT INTO nutrients (id, title, quantityUnit) VALUES (1, "Fat", 1)');
+	tx.executeSql('INSERT INTO nutrients (id, title, quantityUnit) VALUES (2, "Cholesterol", 2)');
 	
 	tx.executeSql('DROP TABLE IF EXISTS ingredients');
 	tx.executeSql('CREATE TABLE ingredients (id INTEGER unique, title TEXT)');
@@ -25,21 +18,21 @@ function populateDB(tx) {
 	tx.executeSql('INSERT INTO units (id, title) VALUES (4, "l")');
 	
 	tx.executeSql('DROP TABLE IF EXISTS recipes');
-	tx.executeSql('CREATE TABLE recipes (id INTEGER unique, title TEXT, type INTEGER, servingSize INTEGER, servingUnit INTEGER)');
-	tx.executeSql('INSERT INTO recipes (id, title, type, servingSize, servingUnit) VALUES (1, "Mashed potato", 0, 200, 2)');
-	tx.executeSql('INSERT INTO recipes (id, title, type, servingSize, servingUnit) VALUES (2, "Carrots salad", 0, 100, 2)');
+	tx.executeSql('CREATE TABLE recipes (id INTEGER unique, title TEXT, diet INTEGER, servingSize REAL, servingUnit INTEGER, image TEXT, url TEXT)');
+	tx.executeSql('INSERT INTO recipes (id, title, diet, servingSize, servingUnit, image, url) VALUES (1, "Mashed potato", 3, 200, 2, "1.jpg", "google.com")');
+	tx.executeSql('INSERT INTO recipes (id, title, diet, servingSize, servingUnit, image, url) VALUES (2, "Carrots salad", 4, 100, 2, "2.jpg", "facebook.com")');
 	
 	tx.executeSql('DROP TABLE IF EXISTS recipes_nutrients');
-	tx.executeSql('CREATE TABLE recipes_nutrients (recipeId INTEGER, nutrientId INTEGER, quantity REAL, quantityUnit INTEGER)');
-	tx.executeSql('INSERT INTO recipes_nutrients (recipeId, nutrientId, quantity, quantityUnit) VALUES (1, 1, 8.5, 2)');
-	tx.executeSql('INSERT INTO recipes_nutrients (recipeId, nutrientId, quantity, quantityUnit) VALUES (1, 2, 150, 2)');
-	tx.executeSql('INSERT INTO recipes_nutrients (recipeId, nutrientId, quantity, quantityUnit) VALUES (2, 2, 80, 2)');
+	tx.executeSql('CREATE TABLE recipes_nutrients (recipeId INTEGER, nutrientId INTEGER, quantity REAL)');
+	tx.executeSql('INSERT INTO recipes_nutrients (recipeId, nutrientId, quantity) VALUES (1, 1, 8.5)');
+	tx.executeSql('INSERT INTO recipes_nutrients (recipeId, nutrientId, quantity) VALUES (1, 2, 150)');
+	tx.executeSql('INSERT INTO recipes_nutrients (recipeId, nutrientId, quantity) VALUES (2, 2, 80)');
 	
 	tx.executeSql('DROP TABLE IF EXISTS ingredients_recipes');
-	tx.executeSql('CREATE TABLE ingredients_recipes (recipeId INTEGER, ingredientId INTEGER, quantity REAL, quantityUnit INTEGER)');
-	tx.executeSql('INSERT INTO ingredients_recipes (recipeId, ingredientId, quantity, quantityUnit) VALUES (1, 2, 100, 2)');
-	tx.executeSql('INSERT INTO ingredients_recipes (recipeId, ingredientId, quantity, quantityUnit) VALUES (1, 3, 10, 2)');
-	tx.executeSql('INSERT INTO ingredients_recipes (recipeId, ingredientId, quantity, quantityUnit) VALUES (2, 1, 200, 2)');
+	tx.executeSql('CREATE TABLE ingredients_recipes (recipeId INTEGER, ingredientId INTEGER, weight REAL, weightUnit INTEGER, quantity REAL, quantityUnit INTEGER)');
+	tx.executeSql('INSERT INTO ingredients_recipes (recipeId, ingredientId, weight, weightUnit, quantity, quantityUnit) VALUES (1, 2, 100, 2, 3, 3)');
+	tx.executeSql('INSERT INTO ingredients_recipes (recipeId, ingredientId, weight, weightUnit, quantity, quantityUnit) VALUES (1, 3, 10, 2, 1, 4)');
+	tx.executeSql('INSERT INTO ingredients_recipes (recipeId, ingredientId, weight, weightUnit, quantity, quantityUnit) VALUES (2, 1, 200, 2, 200, 2)');
 	
 	tx.executeSql('DROP TABLE IF EXISTS plan');
 	tx.executeSql('CREATE TABLE plan (date TEXT, recipeId INTEGER, quantity REAL, meal INTEGER)');

@@ -33,147 +33,52 @@
         <link href="lib/touch-2.4.1/resources/css/sencha-touch.css" rel="stylesheet" type="text/css" />
         
         <!-- Overriding Styles -->
-        <link href="css/base.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="css/overrides.css"/>
+        
+        <!-- Models -->
+        <script type="text/javascript" src="js/models/dailyPlanRecipe.js"></script>
+        <script type="text/javascript" src="js/models/recipe.js"></script>
+        <script type="text/javascript" src="js/models/nutrientChart.js"></script>
+        
+        <!-- Stores -->
+        <script type="text/javascript" src="js/stores/dailyPlan.js"></script>
+        <script type="text/javascript" src="js/stores/recipes.js"></script>
+        <script type="text/javascript" src="js/stores/nutrients.js"></script>
+        
+        <!-- Charts -->
+        <script type="text/javascript" src="js/charts/nutrients.js"></script>
+        
+        <!-- Screens -->
+        <script type="text/javascript" src="js/screens/menu.js"></script>
+        <script type="text/javascript" src="js/screens/profile.js"></script>
+        <script type="text/javascript" src="js/screens/home.js"></script>
+        <script type="text/javascript" src="js/screens/dailyPlan.js"></script>
+        <script type="text/javascript" src="js/screens/recipes.js"></script>
+        
+        <!-- DB -->
+        <script type="text/javascript" src="db/db_functions.js"></script>
+        <script type="text/javascript" src="db/db_prototypes.js"></script>
+        <script type="text/javascript" src="db/db_init.js"></script>
     </head>
     <body>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
             app.initialize();
-			
+            
 			Ext.application({
 				name: 'Sencha',
 
 				launch: function() {
-					var chart = {
-						xtype: 'polar',
-						animate: true,
-						store: {
-							fields: ['id', 'value'],
-							data: [{
-								'id': 'Carbs',
-								'value': 100 * Math.random()
-							}, {
-								'id': 'Fats',
-								'value': 100 * Math.random()
-							}, {
-								'id': 'Fibers',
-								'value': 100 * Math.random()
-							}, {
-								'id': 'Minerals',
-								'value': 100 * Math.random()
-							}, {
-								'id': 'Proteins',
-								'value': 100 * Math.random()
-							}, {
-								'id': 'Vitamins',
-								'value': 100 * Math.random()
-							}, {
-								'id': 'Calories',
-								'value': 100 * Math.random()
-							}]
-						},
-						background: 'white',
-						flex: 1,
-						insetPadding: 50,
-						interactions: 'rotate',
-						series: [
-							{
-								type: 'radar',
-								xField: 'id',
-								yField: 'value',
-								style: {
-									fillStyle: 'rgba(0,255,0,0.2)',
-									strokeStyle: 'rgba(0,0,0,0.8)',
-									lineWidth: 1
-								}
-							}
-						],
-						axes: [
-							{
-								type: 'numeric',
-								position: 'radial',
-								fields: 'value',
-								grid: true,
-								style: {
-									estStepSize: 20
-								},
-								label: {
-									fill: 'black'
-								}
-							},
-							{
-								type: 'category',
-								position: 'angular',
-								fields: 'id',
-								grid: true,
-								style: {
-									estStepSize: 2
-								},
-								label: {
-									fill: 'black'
-								}
-							}
-						]
-					};
-					
+					initDB();
+            	
 					// Fixes the margins for iOS
 					var margin = '0';
 					if (Ext.os.is.iOS && Ext.os.version.major >= 7) {
 						margin = '20 0 0 0';
 					}
 					
-					Ext.define('DailyPlanRecipe', {
-					    extend: 'Ext.data.Model',
-					    config: {
-					        fields: ['item', 'meal']
-					    }
-					});
-					
-					var storeDailyPlan = Ext.create('Ext.data.Store', {
-						model: 'DailyPlanRecipe',
-						sorters: ['meal', 'item'],
-						grouper: {
-							groupFn: function(record) {
-								return record.get('meal');
-							}
-						},
-						data: [
-							{item: 'Cookies', meal: 'Breakfast'},
-							{item: 'Mashed Potatos', meal: 'Dinner'},
-							{item: 'Meatballs', meal: 'Breakfast'},
-							{item: 'Pasta Carbonara', meal: 'Lunch'},
-							{item: 'Paçoca', meal: 'Snack'},
-							{item: 'Curry', meal: 'Lunch'},
-							{item: 'Borsch', meal: 'Dinner'}
-						]
-					});
-					
-					Ext.define('Recipe', {
-					    extend: 'Ext.data.Model',
-					    config: {
-					        fields: ['name']
-					    }
-					});
-					
-					var storeRecipes = Ext.create('Ext.data.Store', {
-						model: 'Recipe',
-						sorters: ['name'],
-						grouper: {
-							groupFn: function(record) {
-								return record.get('name')[0];
-							}
-						},
-						data: [
-							{name: 'Cookies'},
-							{name: 'Mashed Potatos'},
-							{name: 'Meatballs'},
-							{name: 'Pasta Carbonara'},
-							{name: 'Paçoca'},
-							{name: 'Curry'},
-							{name: 'Borsch'}
-						]
-					});
+					var menuPanel = null;
 					
 					Ext.create("Ext.Panel", {
 						fullscreen: true,
@@ -200,76 +105,22 @@
 									margin: '6 3 3 3',
 									listeners: {
 										tap: function () {
-											Ext.Viewport.add({
-												xtype: 'panel',
-												width: '80%',
-												autoHeight: true,
-												centered: true,
-												modal: true,
-												showAnimation: {
-													type: 'slide'
-												},
-												hideAnimation: {
-													type: 'slideOut',
-													direction: 'right'
-												},
-												hideOnMaskTap: true,
-												padding: 20,
-												defaults: {
-													xtype: 'button',
-													margin: 10,
-													handler: function () {
-														Ext.Viewport.add({
-															xtype: 'panel',
-															width: '65%',
-															autoHeight: true,
-															centered: true,
-															modal: true,
-															showAnimation: {
-																type: 'popIn',
-																duration: 250,
-																easing: 'ease-out'
-															},
-															hideAnimation: {
-																type: 'popOut',
-																duration: 250,
-																easing: 'ease-out'
-															},
-															hideOnMaskTap: true,
-															styleHtmlContent: true,
-															html: '<p>Comming soon!</p>',
-															items: [{
-																xtype: 'toolbar',
-																docked: 'top',
-																title: 'New Feature'
-															}]
-														}).show();
-													}
-												},
-												items: [{
-													xtype: 'toolbar',
-													docked: 'top',
-													title: 'Menu',
-													margin: 0
-												}, {
-													text: 'About Us'
-												}, {
-													text: 'Diet Requirements'
-												}, {
-													text: 'Shopping List'
-												}, {
-													text: 'Rate Us'
-												}, {
-													text: 'GeoLocation'
-												}]
-											}).show();
+											if (!menuPanel)
+												menuPanel = Ext.Viewport.add(Ext.create('Nutrilicious.screens.Menu'));
+											
+											menuPanel.show();
 										}
 									}
 								}]
 							}, {
 								xtype: 'datepickerfield',
 								id: 'datepicker',
-								value: new Date()
+								value: new Date(),
+								listeners: {
+									change: function () {
+										Ext.getCmp('NutrientChart').getStore().loadData()
+									}
+								}
 							}]
 						}, {
 							xtype: 'carousel',
@@ -290,228 +141,21 @@
 										});
 								}
 							},
-							items: [{
-								//title: 'Profile',
-								layout: 'vbox',
-								items: [{
-									items: [{
-										xtype: 'datepickerfield',
-										label: 'Birthday',
-										picker: {
-											yearFrom: 1900,
-											value: {
-												year: 1980
-											}
-										}
-									}, {
-										layout: 'hbox',
-										items: [{
-											xtype: 'component',
-											flex: 6,
-											html: '<div class="field-label">Height</div>'
-										}, {
-											xtype: 'numberfield',
-											flex: 4,
-											listeners: {
-												blur: function (field) {
-													if (!field.getValue() || field.getValue() < 0)
-														field.setValue(0);
-												}
-											}
-										}, {
-											xtype: 'component',
-											flex: 3,
-											html: '<div class="field-label">ft</div>'
-										}, {
-											xtype: 'numberfield',
-											flex: 4,
-											listeners: {
-												blur: function (field) {
-													if (!field.getValue() || field.getValue() < 0)
-														field.setValue(0);
-												}
-											}
-										}, {
-											xtype: 'component',
-											flex: 3,
-											html: '<div class="field-label">in</div>'
-										}]
-									}, {
-										layout: 'hbox',
-										items: [{
-											xtype: 'component',
-											flex: 6,
-											html: '<div class="field-label" style="line-height: 32px;">Gender</div>'
-										}, {
-											xtype: 'togglefield',
-											styleHtmlCls: 'gender',
-											styleHtmlContent: false,
-											flex: 7
-										}, {
-											xtype: 'label',
-											html: '<div class="field-label" style="line-height: 32px;">BMI: 50</div>',
-											flex: 7
-										}]
-									}]
-								}, {
-									layout: 'hbox',
-									flex: 1,
-									items: [{
-										xtype: 'img',
-										flex: 3,
-										maxHeight: '100%',
-										src: 'img/body1.png'
-									}, {
-										scrollable: true,
-										flex: 7,
-										defaults: {
-											labelAlign: 'top'
-										},
-										items: [{
-											xtype: 'sliderfield',
-											label: 'Slider 1',
-											value: 50,
-											minValue: 0,
-											maxValue: 100
-										}, {
-											xtype: 'sliderfield',
-											label: 'Slider 2',
-											value: 50,
-											minValue: 0,
-											maxValue: 100
-										}, {
-											xtype: 'sliderfield',
-											label: 'Slider 3',
-											value: 50,
-											minValue: 0,
-											maxValue: 100
-										}, {
-											xtype: 'sliderfield',
-											label: 'Slider 4',
-											value: 50,
-											minValue: 0,
-											maxValue: 100
-										}, {
-											xtype: 'sliderfield',
-											label: 'Slider 5',
-											value: 50,
-											minValue: 0,
-											maxValue: 100
-										}, {
-											xtype: 'sliderfield',
-											label: 'Slider 6',
-											value: 50,
-											minValue: 0,
-											maxValue: 100
-										}, {
-											xtype: 'sliderfield',
-											label: 'Slider 5',
-											value: 50,
-											minValue: 0,
-											maxValue: 100
-										}, {
-											xtype: 'sliderfield',
-											label: 'Slider 8',
-											value: 50,
-											minValue: 0,
-											maxValue: 100
-										}]
-									}]
-								}]
-							}, {
-								//title: 'Home',
-								layout: 'fit',
-								items: [chart]
-							}, {
-								//title: 'Plan',
-								layout: 'fit',
-								items: [{
-									xtype: 'list',
-    								itemTpl: '{item}',
-    								itemCls: 'remove',
-									store: storeDailyPlan,
-									grouped: true,
-									onItemDisclosure: function (record) {
-										Ext.Msg.alert('Click detected', 'You clicked on ' + record.data.item);
-									}
-								}]
-							}, {
-								//title: 'Recipes',
-								layout: 'vbox',
-								items: [{
-									xtype : 'toolbar',
-									docked: 'top',
-									items: [{
-										xtype: 'searchfield',
-										placeHolder: 'Search',
-										flex: 1
-									}]
-								}, {
-									xtype: 'list',
-									itemTpl: '{name}',
-									itemCls: 'add',
-									flex: 1,
-									store: storeRecipes,
-									grouped: true,
-									onItemDisclosure: function (record) {
-										Ext.Viewport.add({
-											xtype: 'panel',
-											title: 'Choose',
-											modal: true,
-											autoHeight: true,
-											closable: false,
-											showAnimation: {
-												type: 'popIn',
-												duration: 250,
-												easing: 'ease-out'
-											},
-											hideAnimation: {
-												type: 'popOut',
-												duration: 250,
-												easing: 'ease-out'
-											},
-											centered: true,
-											width: '80%',
-											items: [{
-												xtype : 'toolbar',
-												docked: 'bottom',
-												deafults: {
-													xtype: 'button'
-												},
-												align: 'right',
-												items: [{
-													xtype: 'container',
-													flex: 1
-												}, {
-													text: 'Ok',
-													ui: 'confirm-round'
-												}, {
-													text: 'Cancel',
-													ui: 'decline-round',
-													handler: function (btn) {
-														btn.up('panel').destroy();
-													}
-												}]
-											}, {
-												xtype: 'selectfield',
-												placeHolder: 'Meal',
-												store: ['asd', 'qwe']
-											}, {
-												xtype: 'spinnerfield',
-												label: 'Quantity',
-												labelWidth: 90,
-												stepValue: 1,
-												minValue: 1,
-												maxValue: 10,
-												cycle: true,
-												value: 1
-											}]
-										});
-									}
-								}]
-							}]
+							items: [
+								Ext.create('Nutrilicious.screens.Profile', {
+									id: 'ProfileScreen'
+								}),
+								Ext.create('Nutrilicious.screens.Home', {
+									id: 'HomeScreen'
+								}),
+								Ext.create('Nutrilicious.screens.DailyPlan'),
+								Ext.create('Nutrilicious.screens.Recipes')
+							]
 						}]
 					});
+					
+					// Fixing animation for first slide...
+					Ext.getCmp('datepicker').show();
 				}
 			});
         </script>
